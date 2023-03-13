@@ -1,6 +1,7 @@
 import requests
 from time import sleep
 from bs4 import BeautifulSoup
+# import urllib3
 
 
 # Requisito 1
@@ -11,7 +12,12 @@ def fetch(url):
         web_request = requests.get(url, headers=headers, timeout=3)
         if web_request.status_code == 200:
             return web_request.text
-    except requests.exceptions.Timeout:
+        web_request.raise_for_status()
+    except (
+            requests.exceptions.Timeout,
+            requests.exceptions.HTTPError,
+            requests.exceptions.ConnectionError,
+            ):
         return None
 
 
@@ -25,7 +31,14 @@ def scrape_updates(html_content):
 
 # Requisito 3
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    try:
+        soup = BeautifulSoup(html_content, "html.parser")
+        href = soup.find("a", class_="next page-numbers")["href"]
+        if html_content is None:
+            return None
+        return href
+    except Exception:
+        return None
 
 
 # Requisito 4
@@ -39,4 +52,4 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    print(scrape_updates(fetch("https://blog.betrybe.com/")))
+    print(scrape_next_page_link(fetch("https://blog.betrybe.coma/")))
