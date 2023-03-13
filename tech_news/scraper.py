@@ -1,5 +1,6 @@
 import requests
 from time import sleep
+from bs4 import BeautifulSoup
 
 
 # Requisito 1
@@ -16,7 +17,10 @@ def fetch(url):
 
 # Requisito 2
 def scrape_updates(html_content):
-    """Seu código deve vir aqui"""
+    soup = BeautifulSoup(html_content, "html.parser")
+    hrefs = soup.find_all("a", class_="cs-overlay-link")
+    href_list = [href["href"] for href in hrefs]
+    return href_list
 
 
 # Requisito 3
@@ -35,4 +39,4 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    print(fetch("https://blog.betrybe.com/"))
+    print(scrape_updates(fetch("https://blog.betrybe.com/")))
