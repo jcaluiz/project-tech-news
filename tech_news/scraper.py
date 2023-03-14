@@ -1,6 +1,7 @@
 import requests
 from time import sleep
 from bs4 import BeautifulSoup
+import re
 # import urllib3
 
 
@@ -43,7 +44,19 @@ def scrape_next_page_link(html_content):
 
 # Requisito 4
 def scrape_news(html_content):
-    """Seu código deve vir aqui"""
+    soup = BeautifulSoup(html_content, "html.parser")
+    time = re.search(r"\d+", soup.find("li", class_="meta-reading-time").text)
+    div_text = soup.find("div", class_="entry-content")
+    information_news = {
+        "url": soup.find('link', {'rel': 'canonical'})["href"],
+        "title": soup.find("h1", class_="entry-title").text.strip(),
+        "timestamp": soup.find("li", class_="meta-date").text,
+        "writer": soup.find("a", class_="url fn n").text,
+        "reading_time": int(time.group()),
+        "summary": div_text.find("p").text.strip(),
+        "category": soup.find("span", class_="label").text,
+    }
+    return information_news
 
 
 # Requisito 5
@@ -52,4 +65,4 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    print(scrape_next_page_link(fetch("https://blog.betrybe.coma/")))
+    print(scrape_news(fetch("https://blog.betrybe.com/carreira/livros-sobre-lideranca/")))
