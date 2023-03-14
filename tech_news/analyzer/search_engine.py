@@ -1,6 +1,16 @@
+from tech_news.database import search_news
+
+
 # Requisito 7
 def search_by_title(title):
-    """Seu código deve vir aqui"""
+    query = {"title": {"$regex": title, "$options": "i"}}
+    search_list = search_news(query)
+    tuple_search = []
+    for search in search_list:
+        tuple_search.append(
+            (search["title"], search["url"])
+        )
+    return tuple_search
 
 
 # Requisito 8
@@ -11,3 +21,7 @@ def search_by_date(date):
 # Requisito 9
 def search_by_category(category):
     """Seu código deve vir aqui"""
+
+
+if __name__ == "__main__":
+    print(search_by_title("notícia"))
