@@ -20,7 +20,14 @@ def search_by_date(date):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
+    query = {"category": {"$regex": category, "$options": "i"}}
+    search_list = search_news(query)
+    tuple_search = []
+    for search in search_list:
+        tuple_search.append(
+            (search["title"], search["url"])
+        )
+    return tuple_search
 
 
 if __name__ == "__main__":
