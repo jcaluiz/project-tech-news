@@ -66,7 +66,7 @@ def get_tech_news(amount):
     links = scrape_updates(fetch(response))
     news = []
     iteration_times = 0
-    for _ in range(amount):
+    for _ in range(int(amount)):
         iteration_times += 1
         news.append(scrape_news(fetch(links[iteration_times - 1])))
         if len(links) == iteration_times:
