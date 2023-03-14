@@ -2,6 +2,7 @@ import requests
 from time import sleep
 from bs4 import BeautifulSoup
 import re
+from tech_news.database import create_news
 # import urllib3
 
 
@@ -61,8 +62,23 @@ def scrape_news(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    response = "https://blog.betrybe.com/"
+    links = scrape_updates(fetch(response))
+    news = []
+    iteration_times = 0
+    for _ in range(amount):
+        iteration_times += 1
+        news.append(scrape_news(fetch(links[iteration_times - 1])))
+        if len(links) == iteration_times:
+            iteration_times = 0
+            response = scrape_next_page_link(fetch(response))
+            sleep(1)
+            fetch_request = fetch(response)
+            requests.get(scrape_next_page_link(fetch_request))
+            links = scrape_updates(fetch_request)
+    create_news(news)
+    return news
 
 
 if __name__ == "__main__":
-    print(scrape_news(fetch("https://blog.betrybe.com/")))
+    print(get_tech_news(30))
