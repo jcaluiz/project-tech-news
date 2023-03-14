@@ -65,4 +65,4 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    print(scrape_news(fetch("https://blog.betrybe.com/carreira/livros-sobre-lideranca/")))
+    print(scrape_news(fetch("https://blog.betrybe.com/")))
