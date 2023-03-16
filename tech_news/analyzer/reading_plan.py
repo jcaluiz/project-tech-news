@@ -62,3 +62,8 @@ class ReadingPlanService:
             return True
 
         return False
+
+
+if __name__ == "__main__":
+    reading_plan = ReadingPlanService()
+    print(reading_plan.group_news_for_available_time())
